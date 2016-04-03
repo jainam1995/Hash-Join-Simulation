@@ -5,15 +5,15 @@ using namespace std;
 
 void callfunction(int round,int& flag,int page1,int page2,int no_pages,int rounds,int buc,string tempstr)
 {
-	if(round>rounds || round+1>no_pages-1)
+	if(round>rounds )
 	{flag=0;
 		return;
 
 	}
 
 int no1=0;int no2=0;int value;
-	int vec[round+1];string line;int final1[round+1];int final2[round+1];
-	for(int i=0;i<=round;i++)
+	int vec[no_pages-1];string line;int final1[no_pages-1];int final2[no_pages-1];
+	for(int i=0;i<no_pages-1;i++)
 		{vec[i]=0;final1[i]=0;}
 	fstream f;
 	fstream inter;
@@ -28,7 +28,7 @@ while(getline(f,line))
 {no1++;
 	
 value=atoi(line.c_str());
-int bucket=value%(round+1);
+int bucket=(value%(int)(pow(10,round)))%(no_pages-1);
 if(vec[bucket]==0)
 final1[bucket]++;
 vec[bucket]++;
@@ -51,12 +51,12 @@ inter.close();
 }
 f.close();
 cout<<"Done with relation rel1.round"<<round-1<<".bucket"<<buc<<".Created the following files :\n";
-for(int i=0;i<round+1;i++)
+for(int i=0;i<no_pages-1;i++)
 {cout<<"rel1.round"<<round<<".bucket"<<i<<" : "<<final1[i]<<" pages.\n";
 
 }
 
-	for(int i=0;i<=round;i++)
+	for(int i=0;i<no_pages-1;i++)
 		{vec[i]=0;final2[i]=0;}
 
 	cout<<"Reading relation rel2.round"<<round-1<<".bucket"<<buc<<"\n";
@@ -69,7 +69,7 @@ while(getline(f,line))
 {no2++;
 	
 value=atoi(line.c_str());
-int bucket=value%(round+1);
+int bucket=(value%(int)(pow(10,round)))%(no_pages-1);
 if(vec[bucket]==0)
 final2[bucket]++;
 vec[bucket]++;
@@ -90,18 +90,19 @@ inter.close();
 }
 f.close();
 cout<<"Done with relation rel2.round"<<round-1<<".bucket"<<buc<<".Created the following files :\n";
-for(int i=0;i<round+1;i++)
+for(int i=0;i<no_pages-1;i++)
 {cout<<"rel2.round"<<round<<".bucket"<<i<<" : "<<final2[i]<<" pages.\n";
 
 }
 fstream temp;
 
-for(int i=0;i<=round;i++)
+for(int i=0;i<no_pages-1;i++)
 {cout<<"Bucket "<<i<<" .Total size is "<<final1[i]+final2[i]<<" pages.\n";
 	if(final1[i]+final2[i]>no_pages-1)
 	{cout<<"Cannot perform in memory join as no of pages available are "<<no_pages<<".\n";
 if(round+1>rounds)
 {flag=0;return;
+
 }
 	cout<<"Performing "<<round+1<<" round of hashing on round"<<round<<".bucket"<<i<<".\n";
 	stringstream temp2;temp2<<i;
@@ -110,7 +111,7 @@ if(round+1>rounds)
 	stringstream temps2;temps2<<round+1;
 	ifstream tempt;
 	fstream temptempt;string line3;int value3;
-	for(int h=0;h<=round+1;h++)
+	for(int h=0;h<no_pages-1;h++)
 	{stringstream temph;temph<<h;
 		string g="rel1.round"+temps2.str()+".bucket"+temph.str();
 		ifstream ifile(g.c_str());
@@ -135,7 +136,7 @@ if(round+1>rounds)
 		}
 
 	}
-	for(int h=0;h<=round+1;h++)
+	for(int h=0;h<no_pages-1;h++)
 	{stringstream temph;temph<<h;
 		string g="rel2.round"+temps2.str()+".bucket"+temph.str();
 		ifstream ifile(g.c_str());
@@ -195,14 +196,14 @@ if(round+1>rounds)
 
 
 void main_function(int round,int& flag,int page1,int page2,int no_pages,int rounds)
-{if(round>rounds || round+1>no_pages-1)
+{if(round>rounds)
 	{flag=0;
 		return;
 
 	}
 	int no1=0;int no2=0;int value;
-	int vec[round+1];string line;int final1[round+1];int final2[round+1];
-	for(int i=0;i<=round;i++)
+	int vec[no_pages-1];string line;int final1[no_pages-1];int final2[no_pages-1];
+	for(int i=0;i<no_pages-1;i++)
 		{vec[i]=0;final1[i]=0;}
 	fstream f;
 	fstream inter;
@@ -213,7 +214,7 @@ while(getline(f,line))
 {no1++;
 	
 value=atoi(line.c_str());
-int bucket=value%(round+1);
+int bucket=(value%(int)(pow(10,round)))%(no_pages-1);
 if(vec[bucket]==0)
 final1[bucket]++;
 vec[bucket]++;
@@ -235,12 +236,12 @@ inter.close();
 }
 f.close();
 cout<<"Done with relation 1.Created the following files :\n";
-for(int i=0;i<round+1;i++)
+for(int i=0;i<no_pages-1;i++)
 {cout<<"rel1.round"<<round<<".bucket"<<i<<" : "<<final1[i]<<" pages.\n";
 
 }
 
-	for(int i=0;i<=round;i++)
+	for(int i=0;i<no_pages-1;i++)
 		{vec[i]=0;final2[i]=0;}
 	cout<<"\nReading relation 2:\n";
 f.open("rel2.txt");
@@ -248,7 +249,7 @@ while(getline(f,line))
 {no2++;
 	
 value=atoi(line.c_str());
-int bucket=value%(round+1);
+int bucket=(value%(int)(pow(10,round)))%(no_pages-1);
 if(vec[bucket]==0)
 final2[bucket]++;
 vec[bucket]++;
@@ -269,25 +270,24 @@ inter.close();
 }
 f.close();
 cout<<"Done with relation 2.Created the following files :\n";
-for(int i=0;i<round+1;i++)
+for(int i=0;i<no_pages-1;i++)
 {cout<<"rel2.round"<<round<<".bucket"<<i<<" : "<<final2[i]<<" pages.\n";
 
 }
 
-for(int i=0;i<=round;i++)
+for(int i=0;i<no_pages-1;i++)
 {cout<<"Bucket "<<i<<" .Total size is "<<final1[i]+final2[i]<<" pages.\n";
 	if(final1[i]+final2[i]>no_pages-1)
 	{cout<<"Cannot perform in memory join as no of pages available are "<<no_pages<<".\n";
 if(round+1>rounds)
-{flag=0;return;
-
-}
+	{flag=0;
+		return;}
 	cout<<"Performing "<<round+1<<" round of hashing on round"<<round<<".bucket"<<i<<".\n";
 	stringstream temps;temps<<i;
 	stringstream temps2;temps2<<round+1;
 	ifstream tempt;
 	fstream temptempt;string line3;int value3;
-	for(int h=0;h<=round+1;h++)
+	for(int h=0;h<no_pages-1;h++)
 	{stringstream temph;temph<<h;
 		string g="rel1.round"+temps2.str()+".bucket"+temph.str();
 		ifstream ifile(g.c_str());
@@ -312,7 +312,7 @@ if(round+1>rounds)
 		}
 
 	}
-	for(int h=0;h<=round+1;h++)
+	for(int h=0;h<no_pages-1;h++)
 	{stringstream temph;temph<<h;
 		string g="rel2.round"+temps2.str()+".bucket"+temph.str();
 		ifstream ifile(g.c_str());
@@ -397,7 +397,7 @@ f.close();
 cout<<"Size of relation 1: "<<ceil((float)(no1*record1_size)/(float)page_size)<<" pages\n";
 cout<<"Size of relation 2: "<<ceil((float)(no2*record2_size)/(float)page_size)<<" pages\n";
 cout<<"Total number of available pages: "<<no_pages<<"\n";
-cout<<"Number of buckets in hash table: 2\n";
+cout<<"Number of buckets in hash table: "<<no_pages-1<<"\n";
 
 
 int flag=1;
@@ -411,8 +411,8 @@ if(flag==0)
 
 else cout<<"Done!!!\n";
 
-
 }
+
 
 
 
